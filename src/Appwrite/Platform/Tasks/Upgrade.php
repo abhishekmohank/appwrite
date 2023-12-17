@@ -14,6 +14,8 @@ class Upgrade extends Install
 
     public function __construct()
     {
+        parent::__construct(); // Call parent constructor
+
         $this
             ->desc('Upgrade Appwrite')
             ->param('httpPort', '', new Text(4), 'Server HTTP port', true)
@@ -37,6 +39,11 @@ class Upgrade extends Install
             Console::log('      └── docker-compose.yml');
             Console::exit(1);
         }
+
         parent::action($httpPort, $httpsPort, $organization, $image, $interactive);
+
+        // Add additional upgrade logic here if needed
+        // For example, you may want to perform specific tasks when upgrading
+        // the Appwrite installation.
     }
 }
