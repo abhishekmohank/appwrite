@@ -12,9 +12,11 @@ class CNAME extends Validator
     protected $target;
 
     /**
+     * CNAME constructor.
+     *
      * @param string $target
      */
-    public function __construct($target)
+    public function __construct(string $target)
     {
         $this->target = $target;
     }
@@ -46,17 +48,26 @@ class CNAME extends Validator
             return false;
         }
 
-        if (!$records) {
-            return false;
-        }
+        return $this->hasMatchingTarget($records);
+    }
 
-        foreach ($records as $record) {
-            if (isset($record['target']) && $record['target'] === $this->target) {
-                return true;
-            }
-        }
-
-        return false;
+    /**
+     * Check if records have a matching target
+     *
+     * @param array|false $records
+     *
+     * @return bool
+     */
+    private function hasMatchingTarget($records): bool
+    {
+        return $records && count(
+            array_filter(
+                $records,
+                static function ($record) {
+                    return isset($record['target']) && $record['target'] === $this->target;
+                }
+            )
+        ) > 0;
     }
 
     /**
